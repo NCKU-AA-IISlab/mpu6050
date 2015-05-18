@@ -186,9 +186,11 @@ int main(int argc, char **argv){
     ros::init(argc, argv, "mpu6050");
     ros::NodeHandle nh;
     double linear_stdev, angular_stdev, orientation_stdev;
+    int update_rate;
     nh.param("linear_acceleration_stdev", linear_stdev, 0.0003);
     nh.param("angular_velocity_stdev", angular_stdev, 0.02 * (M_PI / 180.0));
     nh.param("orientation_stdev", orientation_stdev, 1.0);
+    nh.param("update_rate", update_rate, 100);
 
     setup_covariance(linear_acceleration_cov, linear_stdev);
     setup_covariance(angular_velocity_cov, angular_stdev);
@@ -204,10 +206,13 @@ int main(int argc, char **argv){
     ros::Duration d(2.0);
     d.sleep();
 
+    ros::Rate r(update_rate);
+
     while(ros::ok()){
         ros::spinOnce();
         loop();
         imu_pub.publish(imu);
+        r.sleep();
     }
     return 0;
 }
