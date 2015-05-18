@@ -68,7 +68,6 @@ float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gra
 float last_ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
 sensor_msgs::Imu imu;
 ros::Publisher imu_pub;
-ros::NodeHandle nh;
 boost::array<double, 9> linear_acceleration_cov;
 boost::array<double, 9> angular_velocity_cov;
 boost::array<double, 9> orientation_cov;
@@ -185,7 +184,7 @@ void setup_covariance(boost::array<double, 9> &cov, double stdev) {
 
 int main(int argc, char **argv){
     ros::init(argc, argv, "mpu6050");
-
+    ros::NodeHandle nh;
     double linear_stdev, angular_stdev, orientation_stdev;
     nh.param("linear_acceleration_stdev", linear_stdev, 0.0003);
     nh.param("angular_velocity_stdev", angular_stdev, 0.02 * (M_PI / 180.0));
